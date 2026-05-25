@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAKKZZ STORE - Blox Fruit Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        utama: '#0A0E17',
+                        biruTerang: '#00A3FF',
+                        biruNeon: '#00CCFF',
+                        hijauTerang: '#22E068',
+                        hijauNeon: '#00FF88',
+                        ungu: '#7928CA',
+                        unguMuda: '#A855F7',
+                        kaca: 'rgba(30, 41, 59, 0.65)',
+                        kacaGelap: 'rgba(15, 23, 42, 0.8)',
+                        teks: '#F1F5F9',
+                        teksAbu: '#CBD5E1',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-biru': '0 0 12px rgba(0, 163, 255, 0.4), 0 0 24px rgba(0, 163, 255, 0.2)',
+                        'neon-hijau': '0 0 12px rgba(34, 224, 104, 0.4), 0 0 24px rgba(34, 224, 104, 0.2)',
+                        'kaca': '0 8px 32px rgba(0, 0, 0, 0.3)',
+                    },
+                    backdropBlur: {
+                        'lg': '16px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto { content-visibility: auto; }
+            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+            .scrollbar-hide::-webkit-scrollbar { display: none; }
+            .gradasi-biru { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); }
+            .gradasi-ungu { background: linear-gradient(135deg, #581C87 0%, #7928CA 100%); }
+            .gradasi-hijau { background: linear-gradient(135deg, #166534 0%, #15803D 100%); }
+            .kaca-efek { background: var(--tw-bg-opacity); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); }
+            .hover-naik { transition: all 0.3s ease; }
+            .hover-naik:hover { transform: translateY(-2px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#05070E] to-[#0F172A] text-teks font-sans min-h-screen">
+    
+    <!-- HEADER KEREN: KACA, BERKILAU, RAPI -->
+    <header class="sticky top-0 z-50 bg-kacaGelap/80 kaca-efek px-4 py-3.5 flex items-center justify-between shadow-kaca">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-biruTerang to-biruNeon flex items-center justify-center shadow-neon-biru">
+                <span class="text-white font-bold text-sm">⚔️</span>
+            </div>
+            <span class="text-lg font-bold tracking-wide">YAKKZZ STORE</span>
+            <!-- STATUS ONLINE LEBIH CANTIK -->
+            <span class="bg-hijauTerang/20 text-hijauNeon text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1.5 ml-2 border border-hijauTerang/30">
+                <span class="w-2 h-2 bg-hijauNeon rounded-full animate-pulse"></span> ONLINE
+            </span>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- 1. KERANJANG -->
+            <a href="#keranjang" class="relative text-teksAbu hover:text-biruNeon transition-all hover-naik">
+                <i class="fa fa-shopping-cart text-lg"></i>
+                <span id="notifKeranjang" class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold w-4.5 h-4.5 flex items-center justify-center rounded-full shadow-lg">0</span>
+            </a>
+            <!-- 2. PESANAN -->
+            <a href="#cekpesanan" class="relative text-teksAbu hover:text-biruNeon transition-all hover-naik">
+                <i class="fa fa-file-text-o text-lg"></i>
+                <span id="notifPesanan" class="absolute -top-2 -right-2 bg-biruTerang text-white text-[9px] font-bold w-4.5 h-4.5 flex items-center justify-center rounded-full shadow-lg">0</span>
+            </a>
+            <!-- 3. KOIN -->
+            <button class="text-teksAbu hover:text-biruNeon transition-all hover-naik"><i class="fa fa-bitcoin text-lg"></i></button>
+            <!-- 4. CHAT -->
+            <button class="text-teksAbu hover:text-biruNeon transition-all hover-naik"><i class="fa fa-comments text-lg"></i></button>
+            <!-- 5. PENGATURAN -->
+            <button class="text-teksAbu hover:text-biruNeon transition-all hover-naik"><i class="fa fa-cog text-lg"></i></button>
+            <button class="md:hidden text-teksAbu hover:text-biruNeon" id="menuToggle"><i class="fa fa-bars text-lg"></i></button>
+        </div>
+    </header>
+
+    <!-- MENU MOBIL LEBIH RAPI -->
+    <div class="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg transform -translate-x-full transition-transform duration-300 md:hidden" id="mobileMenu">
+        <div class="p-6 h-full overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-xl font-bold text-biruNeon">MENU UTAMA</h3>
+                <button id="closeMenu" class="text-teksAbu hover:text-white"><i class="fa fa-times text-xl"></i></button>
+            </div>
+            <div class="flex flex-col gap-4 text-lg">
+                <a href="#layanan" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">📋 Daftar Layanan</a>
+                <a href="https://whatsapp.com/channel/0029VbAVjDXHgZWVGTVHH30r" target="_blank" class="py-3 border-b border-gray-700/50 text-hijauTerang hover:text-hijauNeon transition-all">📢 Lihat Testimoni</a>
+                <a href="#keranjang" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">🛒 Keranjang (<span id="jmlHP">0</span>)</a>
+                <a href="#cekpesanan" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">📄 Pesanan Saya</a>
+                <a href="#cekpesanan" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">🔍 Cek Status Pesanan</a>
+                <a href="#format" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">📝 Cara Pemesanan</a>
+                <a href="#pembayaran" class="py-3 border-b border-gray-700/50 hover:text-biruNeon transition-all">💳 Metode Pembayaran</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BAGIAN UTAMA LEBIH MEWAH -->
+    <section class="px-5 py-10 max-w-lg mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-[clamp(2rem,6vw,2.8rem)] font-extrabold leading-tight tracking-tight">
+                Buy Roblox Items<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-biruTerang to-biruNeon">Fast, Easy & Safe</span><br>
+                <span class="text-white">with YAKKZZ STORE!</span>
+            </h1>
+            <p class="text-teksAbu mt-4 mb-8 text-sm leading-relaxed max-w-sm mx-auto">
+                Toko joki & kebutuhan Blox Fruit paling terpercaya, cepat, dan aman. Proses instan, akun terjamin aman 100%!
+            </p>
+
+            <!-- BANNER UTAMA: BERKILAU, GRADASI, BAGUS BANGET -->
+            <div class="relative rounded-2xl overflow-hidden shadow-neon-biru mb-8 hover-naik">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#0F3460] to-[#165DFF] opacity-90"></div>
+                <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/800/400')] bg-cover bg-center mix-blend-overlay"></div>
+                <div class="relative p-6 text-center py-8">
+                    <h2 class="text-4xl font-black tracking-wider text-white drop-shadow-lg">YAKKZZ STORE</h2>
+                    <p class="text-blue-200/90 text-sm mt-2 font-medium">JOKI BF • JUAL FRUIT • AKUN • DLL</p>
+                    <div class="mt-5 text-xs text-blue-100/80">
+                        CONTACT: 
+                        <a href="https://wa.me/62895622759784" target="_blank" class="text-white hover:underline font-semibold">📞 0895622759784</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOMBOL LEBIH KEREN, BERKILAU, ANIMASI -->
+            <div class="grid gap-4 mb-10">
+                <a href="#layanan" class="bg-gradient-to-r from-biruTerang to-biruNeon hover:from-[#0090E6] hover:to-[#00B8FF] text-white font-bold py-3.5 rounded-xl text-center shadow-neon-biru hover-naik">
+                    🛒 MULAI BELANJA
+                </a>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="https://wa.me/62895622759784" target="_blank" class="bg-gradient-to-r from-hijauTerang to-hijauNeon/80 hover:from-[#16B35C] hover:to-[#22E068] text-white font-semibold py-3.5 rounded-xl text-center shadow-neon-hijau hover-naik">
+                        💬 TANYA ADMIN
+                    </a>
+                    <a href="#format" class="bg-kaca kaca-efek hover:bg-kaca/90 text-white font-semibold py-3.5 rounded-xl text-center hover-naik">
+                        📋 CARA ORDER
+                    </a>
+                </div>
+                <a href="https://whatsapp.com/channel/0029VbAVjDXHgZWVGTVHH30r" target="_blank" class="bg-gradient-to-r from-ungu to-unguMuda hover:from-[#6B21A8] hover:to-[#9333EA] text-white font-semibold py-3.5 rounded-xl text-center shadow-[0_0_12px_rgba(168,85,247,0.3)] hover-naik">
+                    📢 LIHAT TESTIMONI
+                </a>
+            </div>
+
+            <!-- BADGE LEBIH RAPI -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="bg-kaca kaca-efek py-3 rounded-xl text-xs text-center font-medium hover:bg-kaca/80 hover-naik">
+                    🔒 AKUN AMAN 100%
+                </div>
+                <div class="bg-kaca kaca-efek py-3 rounded-xl text-xs text-center font-medium hover:bg-kaca/80 hover-naik">
+                    ⚡ PROSES INSTAN
+                </div>
+                <div class="bg-kaca kaca-efek py-3 rounded-xl text-xs text-center font-medium hover:bg-kaca/80 hover-naik">
+                    ✅ UD 4+ TAHUN
+                </div>
+                <div class="bg-kaca kaca-efek py-3 rounded-xl text-xs text-center font-medium hover:bg-kaca/80 hover-naik">
+                    💬 RESPON CEPAT
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAFTAR LAYANAN: KARTU KACA, BAGUS BANGET -->
+    <main class="px-4 pb-20 max-w-lg mx-auto">
+        
+        <!-- JOKI LEVEL -->
+        <section id="layanan" class="mb-8">
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-biruTerang/20 to-biruNeon/10 px-5 py-3.5 border-b border-biruTerang/20">
+                    <h3 class="font-bold text-lg text-biruNeon">📈 JOKI LEVEL</h3>
+                </div>
+                <div class="p-4 space-y-3.5">
+                    <div class="bg-biruTerang/10 border border-biruTerang/30 p-2.5 rounded-lg text-center text-biru-200 text-xs font-medium">
+                        ✅ BISA REQUEST BERAPA PUN LEVELNYA!
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">100 Lv (Sea 1)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">4.000</span>
+                            <button onclick="tambah('Joki Level 100 Sea 1',4000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">100 Lv (Sea 2)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">4.000</span>
+                            <button onclick="tambah('Joki Level 100 Sea 2',4000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">100 Lv (Sea 3)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">4.000</span>
+                            <button onclick="tambah('Joki Level 100 Sea 3',4000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-yellow-500/30 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium text-yellow-400">✨ 100 Lv (Khusus)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-yellow-400 font-bold">5.000</span>
+                            <button onclick="tambah('Joki Level Khusus',5000)" class="bg-yellow-500 hover:bg-yellow-400 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">500 Lv</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">22.000</span>
+                            <button onclick="tambah('Joki Level 500',22000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">1000 Lv</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">41.000</span>
+                            <button onclick="tambah('Joki Level 1000',41000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MASTERY -->
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden mb-8 shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-biruTerang/20 to-biruNeon/10 px-5 py-3.5 border-b border-biruTerang/20">
+                    <h3 class="font-bold text-lg text-biruNeon">⭐ JOKI MASTERY</h3>
+                </div>
+                <div class="p-4 space-y-3.5">
+                    <p class="text-yellow-400 text-sm font-medium">🍈 BLOX FRUIT • BISA PAKAI M1</p>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">100 Mastery</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">2.000</span>
+                            <button onclick="tambah('Mastery Buah 100',2000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-kaca/40 border border-white/5 hover:bg-kaca/60 transition-all">
+                        <span class="text-sm font-medium">500 Mastery</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-hijauTerang font-bold">9.000</span>
+                            <button onclick="tambah('Mastery Buah 500',9000)" class="bg-hijauTerang hover:bg-hijauNeon/90 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-md hover-naik">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KERANJANG -->
+        <section id="keranjang" class="mb-8">
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-hijauTerang/20 to-hijauNeon/10 px-5 py-3.5 border-b border-hijauTerang/20">
+                    <h3 class="font-bold text-lg text-hijauTerang">🛒 KERANJANG BELANJA</h3>
+                </div>
+                <div class="p-4">
+                    <div id="isiKeranjang" class="space-y-2.5 mb-4 text-sm">
+                        <p class="text-teksAbu text-center py-4">Keranjang masih kosong nih 😔</p>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg border-t border-gray-700/50 pt-3">
+                        <span>Total Harga</span>
+                        <span id="totalHarga" class="text-hijauTerang">Rp 0</span>
+                    </div>
+                    <button onclick="lanjut()" class="w-full mt-4 bg-gradient-to-r from-hijauTerang to-hijauNeon hover:from-[#16B35C] hover:to-[#22E068] py-3 rounded-xl font-bold shadow-neon-hijau hover-naik">LANJUT PESAN 📝</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CEK PESANAN -->
+        <section id="cekpesanan" class="mb-8">
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-biruTerang/20 to-biruNeon/10 px-5 py-3.5 border-b border-biruTerang/20">
+                    <h3 class="font-bold text-lg text-biruTerang">📄 PESANAN & 🔍 CEK STATUS</h3>
+                </div>
+                <div class="p-4 space-y-3.5">
+                    <input type="text" placeholder="Masukkan No Pesanan / Username" class="w-full bg-kaca/40 kaca-efek border border-white/10 rounded-xl px-4 py-3 focus:border-biruTerang outline-none transition-all">
+                    <button class="w-full bg-gradient-to-r from-biruTerang to-biruNeon hover:from-[#0090E6] hover:to-[#00B8FF] py-3 rounded-xl font-bold shadow-neon-biru hover-naik">CEK SEKARANG</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FORMAT PESANAN -->
+        <section id="format" class="mb-8">
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-ungu/20 to-unguMuda/10 px-5 py-3.5 border-b border-ungu/20 text-center">
+                    <h3 class="font-bold text-lg text-unguMuda">📋 FORMAT PEMESANAN</h3>
+                </div>
+                <div class="p-4 space-y-3 text-sm">
+                    <p class="text-center text-teksAbu mb-2">ISI DATA DENGAN BENAR:</p>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 USERNAME : _________________________</div>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 PASSWORD : _________________________</div>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 CATATAN : _________________________</div>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 BACKUP 1 : _________________________</div>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 BACKUP 2 : _________________________</div>
+                    <div class="p-3 bg-kaca/40 rounded-xl border border-white/5">📌 BACKUP 3 : _________________________</div>
+
+                    <div class="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-300 text-xs font-bold text-center mt-3 shadow-md">
+                        ⚠️ DILARANG LOGIN SAAT DIPROSES<br>JIKA DILANGGAR, PESANAN DIBATALKAN OTOMATIS! 🚫
+                    </div>
+
+                    <a href="https://wa.me/62895622759784" target="_blank" class="block w-full bg-gradient-to-r from-hijauTerang to-hijauNeon hover:from-[#16B35C] hover:to-[#22E068] text-center py-3 rounded-xl font-bold mt-2 shadow-neon-hijau hover-naik">
+                        📲 KIRIM KE WHATSAPP
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PEMBAYARAN -->
+        <section id="pembayaran" class="mb-8">
+            <div class="bg-kaca kaca-efek rounded-2xl overflow-hidden shadow-kaca hover-naik">
+                <div class="bg-gradient-to-r from-yellow-500/20 to-yellow-400/10 px-5 py-3.5 border-b border-yellow-500/20 text-center">
+                    <h3 class="font-bold text-lg text-yellow-400">💳 CARA PEMBAYARAN</h3>
+                </div>
+                <div class="p-4 text-center">
+                    <p class="text-teksAbu text-sm mb-2">GOPAY • OVO • DANA • QRIS</p>
+                    <p class="font-bold text-lg mb-4">0895622759784</p>
+                    
+                    <!-- QRIS LEBIH RAPI & BAGUS -->
+                    <div class="bg-white p-4 rounded-2xl max-w-[170px] mx-auto shadow-xl border-4 border-white">
+                        <img src="https://i.ibb.co/9H7sYqG/qris-yakkzz.jpg" alt="QRIS" class="w-full h-auto rounded-lg">
+                        <p class="text-gray-800 font-bold text-sm mt-2">YAKKZZOFC</p>
+                        <p class="text-[10px] text-gray-600">NMID: ID1025451602516</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        let keranjang = [];
+        let total = 0;
+
+        function tambah(nama, harga) {
+            keranjang.push({nama, harga});
+            total += harga;
+            updateKeranjang();
+        }
+
+        function updateKeranjang() {
+            document.getElementById('notifKeranjang').innerText = keranjang.length;
+            document.getElementById('jmlHP').innerText = keranjang.length;
+            
+            const isi = document.getElementById('isiKeranjang');
+            if(keranjang.length === 0) {
+                isi.innerHTML = '<p class="text-teksAbu text-center py-4">Keranjang masih kosong nih 😔</p>';
+            } else {
+                isi.innerHTML = '';
+                keranjang.forEach((item,i)=>{
+                    isi.innerHTML += `<div class="flex justify-between p-2.5 bg-kaca/30 rounded-lg border border-white/5"><span>${i+1}. ${item.nama}</span><span class="text-hijauTerang font-medium">Rp ${item.harga.toLocaleString('id-ID')}</span></div>`;
+                });
+            }
+            document.getElementById('totalHarga').innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        function lanjut() {
+            if(keranjang.length === 0) {
+                alert('❌ Keranjang masih kosong! Pilih dulu layanannya ya.');
+                return;
+            }
+            window.location.href = '#format';
+        }
+
+        // Menu Mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('-translate-x-full');
+        });
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('-translate-x-full');
+        });
+    </script>
+
+</body>
+</html>
